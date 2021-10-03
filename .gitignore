@@ -1,3 +1,9 @@
+# Executables
+makeapng/writepng
+
+# Emacs junk
+*~
+
 # Prerequisites
 *.d
 

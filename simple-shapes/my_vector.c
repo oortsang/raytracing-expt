@@ -53,3 +53,18 @@ VecH vecH_sub(VecH u, VecH v) {
 VecH vecH_smul(double a, VecH v) {
     return (VecH) {.x=a*v.x, .y=a*v.y, .z=a*v.z, .w=v.w};
 }
+
+/* Ray */
+void printRay(Ray r) {
+    printf("Ray {start: (%f %f %f), dir: (%f %f %f %f)",
+           r.start.x, r.start.y, r.start.z,
+           r.dir.x, r.dir.y, r.dir.z, r.dir.w
+        );
+}
+
+Ray ray_fr_at(VecH fr, VecH at) {
+    /* Makes a ray starting at point fr ending at point at */
+    assert(fr.w==0 && at.w==0);  /* should both be points */
+    VecH dir = vecH_sub(at, fr); /* at-fr */
+    return (Ray) {.start=fr, .dir=dir};
+}

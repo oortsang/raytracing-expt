@@ -8,6 +8,7 @@
 
 #include "png_interface.h"
 #include "my_vector.h"
+#include "camera.h"
 
 int main(int argc, char **argv) {
     char *filename = "test.png";
@@ -40,6 +41,10 @@ int main(int argc, char **argv) {
     printf("\n");
     printVecH(vecItoH(u, 0));
     printf("\n");
+
+    Camera cam = {.fr=(VecH){0,0,-1,1}, .n=(VecH){0,0,-1,0}, .v=(VecH){0,1,0,0}, .u=(VecH){1,0,0,0},
+                  .d=1., .nc=0.5, .fc=1.5, .fov=90, .px=40, .py=30, .ar=(double)4/3};
+    printCamera(&cam);
 
     return 0;
 }

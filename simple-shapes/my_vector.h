@@ -24,6 +24,10 @@ typedef struct {
     double shift[3];
 } BasisTransform;
 
+typedef struct {
+    VecH start, dir;
+} Ray;
+
 /* Printing */
 void printVecH(VecH v);
 void printVecI(VecI v);
@@ -41,5 +45,7 @@ VecH vecH_add(VecH u, VecH v);
 VecH vecH_smul(double a, VecH v);
 
 /* VecI vec_mul_add(VecI u, double a, VecH v); /\* To help compute points on a ray *\/ */
+void printRay(Ray r);
+Ray ray_fr_at(VecH fr, VecH at);
 
 #endif

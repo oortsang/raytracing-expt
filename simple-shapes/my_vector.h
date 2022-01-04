@@ -37,12 +37,15 @@ VecI vecHtoI(VecH v);
 VecH vecItoH(VecI v, int is_point);
 
 /* Addition and multiplication */
-VecH vecH_normalize(VecH v);
+VecH vech_divbyw(VecH v);
 /* VecI vecI_add(VecI u, VecI v); */
 /* VecI vecI_smul(double a, VecI v); */
+VecH vech_unit(VecH v);
 
-VecH vecH_add(VecH u, VecH v);
-VecH vecH_smul(double a, VecH v);
+VecH vech_add(VecH u, VecH v);    /* u+v */
+VecH vech_sub(VecH u, VecH v);    /* u-v */
+VecH vech_smul(double a, VecH v); /* scalar multiplication */
+VecH vech_flip(VecH v); /* multiply by x/y/z -1 but leave the trailing 1 intact */
 
 /* VecI vec_mul_add(VecI u, double a, VecH v); /\* To help compute points on a ray *\/ */
 void printRay(Ray r);

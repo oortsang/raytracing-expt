@@ -3,6 +3,7 @@
 /* Includes Homogeneous and Inhomogeneous representations and helper functions  */
 
 #include <stdio.h>
+#include <math.h>
 
 #include <assert.h>
 #include "my_vector.h"
@@ -27,22 +28,30 @@ VecH vecItoH(VecI v, int is_point) {
     return (VecH) {.x = v.x, .y = v.y, .z = v.z, .w = !!is_point};
 }
 
-VecH vecH_normalize(VecH v) {
+VecH vech_divbyw(VecH v) {
     /* Sets the last entry to 1 and divides by it */
     /* Unless the last entry was 0 in which case do nothing */
     double div = v.w ? v.w : 1;
     return (VecH) {.x=v.x/div, .y=v.y/div, .z=v.z/div, .w=!!v.w};
 }
 
+VecH vech_unit(VecH v) {
+    /* Sets the length to 1 after dividing by v.w (if it's nonzero) */
+    if (v.w)
+        v = (VecH) {.x=v.x/v.w, .y=v.y/v.w, .z=v.z/v.w, .w=1};
+    double length = sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
+    return (VecH) {.x=v.x/length, .y=v.y/length, .z=v.z/length, .w=v.w};
+}
+
 /* Addition and multiplication */
-VecH vecH_add(VecH u, VecH v) {
+VecH vech_add(VecH u, VecH v) {
     /* Homog. Vector addition; should be between a math vector and a point */
     VecH res = {.x=u.x+v.x, .y=u.y+v.y, .z=u.z+v.z, .w=u.w+v.w};
     assert (res.w == 0 || res.w == 1); /* For safety */
     return res;
 }
 
-VecH vecH_sub(VecH u, VecH v) {
+VecH vech_sub(VecH u, VecH v) {
     /* u-v */
     /* Homog. Vector subtraction; should be between two points or two math vectors */
     VecH res = {.x=u.x-v.x, .y=u.y-v.y, .z=u.z-v.z, .w=u.w-v.w};
@@ -50,8 +59,12 @@ VecH vecH_sub(VecH u, VecH v) {
     return res;
 }
 
-VecH vecH_smul(double a, VecH v) {
+VecH vech_smul(double a, VecH v) {
     return (VecH) {.x=a*v.x, .y=a*v.y, .z=a*v.z, .w=v.w};
+}
+
+VecH vech_flip(VecH v) {
+    return vech_smul(-1., v);
 }
 
 /* Ray */
@@ -64,7 +77,7 @@ void printRay(Ray r) {
 
 Ray ray_fr_at(VecH fr, VecH at) {
     /* Makes a ray starting at point fr ending at point at */
-    assert(fr.w==0 && at.w==0);  /* should both be points */
-    VecH dir = vecH_sub(at, fr); /* at-fr */
+    assert(fr.w==1 && at.w==1);  /* should both be points */
+    VecH dir = vech_sub(at, fr); /* at-fr */
     return (Ray) {.start=fr, .dir=dir};
 }

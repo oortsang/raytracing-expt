@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
     /* Clean up */
     if (pic.pixels) free(pic.pixels);
 
+    /* Check vector printing functionality */
     VecI u = {.x=1, .y=2, .z=3};
     printVecI(u);
     printf("\n");
@@ -42,9 +43,26 @@ int main(int argc, char **argv) {
     printVecH(vecItoH(u, 0));
     printf("\n");
 
+    /* Check camera info printing functionality */
+    VecH obj = {0, 0, 0, 1};
     Camera cam = {.fr=(VecH){0,0,-1,1}, .n=(VecH){0,0,-1,0}, .v=(VecH){0,1,0,0}, .u=(VecH){1,0,0,0},
-                  .d=1., .nc=0.5, .fc=1.5, .fov=90, .px=40, .py=30, .ar=(double)4/3};
+                  .d=1., .nc=0.5, .fc=1.5, .fov=90, .px=40, .py=30, .ar=4./3};
     printCamera(&cam);
+
+    /* Check ray printing functionality */
+    Ray r = ray_fr_at(cam.fr, obj);
+    printRay(r);
+    printf("\n");
+
+    /* Check camera ray output */
+    srand(0);
+    int rc;
+    PixelRay *rays = getRays(&cam, 1, &rc);
+    for (int i = 0; i < 10; i++) {
+        printf("Pixel (%d, %d) Ray %d: ", rays[i].i, rays[i].j, i+1);
+        printRay(rays[i].ray);
+        printf("\n");
+    }
 
     return 0;
 }

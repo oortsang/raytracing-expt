@@ -11,6 +11,22 @@
 #include <stdint.h>
 #include "png_interface.h"
 
+
+/* Scalar multiplication of rgb color */
+Color col_smul(double a, Color c) {
+    return (Color) {.red=a*c.red, .green=a*c.green, .blue=a*c.blue};
+}
+
+Color col_add(Color b, Color c) {
+    return (Color) {.red=b.red+c.red, .green=b.green*c.green, .blue=b.blue*c.blue};
+}
+
+/* C+ a*B  fused multiply-add */
+Color col_fma(Color c, double a, Color b) {
+    return (Color) {.red=a*b.red+c.red, .green=a*b.green+c.green, .blue=a*b.blue+c.blue};
+}
+
+
 /* Returns -1 if there was an error, otherwise returns 0 */
 int write_to_png(char *filename, bitmap_t *bm, char *title) {
     /* Grab the file to write to */
@@ -42,9 +58,9 @@ int write_to_png(char *filename, bitmap_t *bm, char *title) {
     png_byte **row_pointers = png_malloc(png_ptr, bm->height*sizeof(png_byte *));
     /* i for row number, j for column number */
     for (int i = 0; i < bm->height; i++) {
-        row_pointers[i] = png_malloc(png_ptr, bm->width*sizeof(pixel_t));
+        row_pointers[i] = png_malloc(png_ptr, bm->width*sizeof(Color));
         for (int j = 0; j < bm->width; j++) {
-            pixel_t *pixel = bm->pixels+i*bm->width+j;
+            Color *pixel = bm->pixels+i*bm->width+j;
             row_pointers[i][3*j+0] = pixel->red;
             row_pointers[i][3*j+1] = pixel->green;
             row_pointers[i][3*j+2] = pixel->blue;
@@ -89,12 +105,12 @@ int write_to_png(char *filename, bitmap_t *bm, char *title) {
 /*     bitmap_t pic; */
 /*     pic.width  = 128; */
 /*     pic.height = 128; */
-/*     pic.pixels = (pixel_t *) malloc(pic.width*pic.height*sizeof(pixel_t)); */
+/*     pic.pixels = (Color *) malloc(pic.width*pic.height*sizeof(Color)); */
 
 /*     /\* Set as a diagonal gradient *\/ */
 /*     for (int i = 0; i < pic.height; i++) { */
 /*         for (int j = 0; j < pic.width; j++) { */
-/*             pixel_t *pixel = pic.pixels + i*pic.height + j; */
+/*             Color *pixel = pic.pixels + i*pic.height + j; */
 /*             pixel->red   = (uint8_t) ((double)(i+j)*256/(pic.height+pic.width)); */
 /*             pixel->green = (uint8_t) ((double)(i+j)*256/(pic.height+pic.width)); */
 /*             pixel->blue  = (uint8_t) ((double)(i+j)*256/(pic.height+pic.width)); */

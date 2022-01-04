@@ -57,8 +57,8 @@ PixelRay *getRays(Camera *cam, int rays_per_pixel, int *ray_count_outparam) {
                 PixelRay *curr = rays + rays_per_pixel*(cam->py*xi+yi) + ri;
                 curr->ray.start = cam->fr;
                 /* Random position within the pixel to try to avoid aliasing */
-                double xpp = pix_wdth*rand(); /* x position in the pixel */
-                double ypp = pix_hght*rand(); /* y position in the pixel */
+                double xpp = pix_wdth*rand()/RAND_MAX; /* x position in the pixel */
+                double ypp = pix_hght*rand()/RAND_MAX; /* y position in the pixel */
                 /* dst = pix_ul + xpp*u - ypp*v */
                 VecH dst = vech_add(pix_ul, vech_add(vech_smul(xpp, u), vech_smul(-ypp, v)));
 

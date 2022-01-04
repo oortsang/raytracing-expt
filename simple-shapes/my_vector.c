@@ -67,9 +67,24 @@ VecH vech_flip(VecH v) {
     return vech_smul(-1., v);
 }
 
+double vech_dot(VecH u, VecH v) {
+    u = vech_divbyw(u); /* in case */
+    v = vech_divbyw(v); /* in case */
+    return (u.x*v.x+u.y*v.y+u.z*v.z);
+}
+
+double vech_norm_squared(VecH v) {
+    v = vech_divbyw(v); /* in case */
+    return v.x*v.x+v.y*v.y+v.z*v.z;
+}
+
+double vech_norm(VecH v) {
+    return sqrt(vech_norm_squared(v));
+}
+
 /* Ray */
 void printRay(Ray r) {
-    printf("Ray {start: (%f %f %f), dir: (%f %f %f %f)",
+    printf("Ray {start: (%f %f %f), dir: (%f %f %f %f)}",
            r.start.x, r.start.y, r.start.z,
            r.dir.x, r.dir.y, r.dir.z, r.dir.w
         );

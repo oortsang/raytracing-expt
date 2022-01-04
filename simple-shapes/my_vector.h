@@ -46,6 +46,9 @@ VecH vech_add(VecH u, VecH v);    /* u+v */
 VecH vech_sub(VecH u, VecH v);    /* u-v */
 VecH vech_smul(double a, VecH v); /* scalar multiplication */
 VecH vech_flip(VecH v); /* multiply by x/y/z -1 but leave the trailing 1 intact */
+double vech_dot(VecH u, VecH v);  /* dot product of the 3d representations of the vectors */
+double vech_norm_squared(VecH v); /* square of l2 norm of the 3d-representation of the vector */
+double vech_norm(VecH v); /* l2 norm of the 3d-representation of the vector */
 
 /* VecI vec_mul_add(VecI u, double a, VecH v); /\* To help compute points on a ray *\/ */
 void printRay(Ray r);

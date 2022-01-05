@@ -13,14 +13,22 @@ typedef struct {
 } Color;
 
 typedef struct {
+    double red;
+    double green;
+    double blue;
+} DoubleColor;
+
+typedef struct {
     size_t   width;
     size_t   height;
     Color *pixels;
 } bitmap_t;
 
-Color col_smul(double a, Color c);
-Color col_add(Color b, Color c);
-Color col_fma(Color c, double a, Color b); /* C + a*B */
+DoubleColor col_smul(double a, DoubleColor c);
+DoubleColor col_add(DoubleColor b, DoubleColor c);
+DoubleColor col_fma(DoubleColor c, double a, DoubleColor b); /* C + a*B */
+Color col_from_double(DoubleColor c);
+
 
 /* Returns -1 if there was an error, otherwise returns 0 */
 int write_to_png(char *filename, bitmap_t *bm, char *title);

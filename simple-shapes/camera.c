@@ -33,7 +33,7 @@ PixelRay *getRays(Camera *cam, int rays_per_pixel, int *ray_count_outparam) {
 
     /* Calculate the view boundaries at the  */
     double half_hght = cam->d * tan(cam->fov/2 * M_PI/180);
-    double half_wdth = cam->d * tan(cam->ar*cam->fov/2 * M_PI/180);
+    double half_wdth = cam->ar*half_hght;
     VecH cam_dir = vech_flip(n);
 
     /* Center and upper-left-hand corner of the view rectangle on the image plane */
@@ -56,10 +56,21 @@ PixelRay *getRays(Camera *cam, int rays_per_pixel, int *ray_count_outparam) {
             for (int ri = 0; ri < rays_per_pixel; ri++) {
                 PixelRay *curr = rays + rays_per_pixel*(cam->py*xi+yi) + ri;
                 curr->ray.start = cam->fr;
+                /* /\* Center of pixel only*\/ */
+                /* double xpp = pix_wdth*0.5; /\* x position in the pixel *\/ */
+                /* double ypp = pix_hght*0.5; /\* y position in the pixel *\/ */
+
                 /* Random position within the pixel to try to avoid aliasing */
-                double xpp = pix_wdth*rand()/RAND_MAX; /* x position in the pixel */
-                double ypp = pix_hght*rand()/RAND_MAX; /* y position in the pixel */
-                /* dst = pix_ul + xpp*u - ypp*v */
+                /* double xpp = pix_wdth*rand()/RAND_MAX; /\* x position in the pixel *\/ */
+                /* double ypp = pix_hght*rand()/RAND_MAX; /\* y position in the pixel *\/ */
+
+                /* 2D Normal distribution works nicely with the Box-Muller transformation */
+                double rn = sqrt(-2*log((double)rand()/RAND_MAX));
+                double tn = 2*M_PI*rand()/RAND_MAX;
+                double xpp = pix_wdth * (0.5+rn*cos(tn)*0.25);
+                double ypp = pix_hght * (0.5+rn*sin(tn)*0.25);
+
+                /* Destination coordinates */
                 VecH dst = vech_add(pix_ul, vech_add(vech_smul(xpp, u), vech_smul(-ypp, v)));
 
                 /* Image coordinates are typically row then column */

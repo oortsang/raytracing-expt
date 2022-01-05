@@ -9,21 +9,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 #include "png_interface.h"
 
 
 /* Scalar multiplication of rgb color */
-Color col_smul(double a, Color c) {
-    return (Color) {.red=a*c.red, .green=a*c.green, .blue=a*c.blue};
+DoubleColor col_smul(double a, DoubleColor c) {
+    return (DoubleColor) {.red=a*c.red, .green=a*c.green, .blue=a*c.blue};
 }
 
-Color col_add(Color b, Color c) {
-    return (Color) {.red=b.red+c.red, .green=b.green*c.green, .blue=b.blue*c.blue};
+DoubleColor col_add(DoubleColor b, DoubleColor c) {
+    return (DoubleColor) {.red=b.red+c.red, .green=b.green*c.green, .blue=b.blue*c.blue};
 }
 
 /* C+ a*B  fused multiply-add */
-Color col_fma(Color c, double a, Color b) {
-    return (Color) {.red=a*b.red+c.red, .green=a*b.green+c.green, .blue=a*b.blue+c.blue};
+DoubleColor col_fma(DoubleColor c, double a, DoubleColor b) {
+    return (DoubleColor) {.red=a*b.red+c.red, .green=a*b.green+c.green, .blue=a*b.blue+c.blue};
+}
+
+Color col_from_double(DoubleColor c) {
+    /* Something is not quite right here... */
+    return (Color) {.red=(uint8_t) floor(c.red), .green=(uint8_t) floor(c.green), .blue=(uint8_t) floor(c.blue)};
 }
 
 

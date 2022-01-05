@@ -13,7 +13,7 @@
 #define _SPHERE_H_
 typedef struct Sphere {
     VecH   center;
-    Color  col;
+    DoubleColor  col;
     double r;
 } Sphere;
 
@@ -22,6 +22,6 @@ typedef struct Sphere {
  * or 0 if there is no such intersection
  * and as an outparameter the color
  */
-double ray_sphere_intersection(Ray *ray, Sphere *sphere, Color *color);
+double ray_sphere_intersection(Ray *ray, Sphere *sphere, DoubleColor *color);
 
 #endif

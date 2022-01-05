@@ -15,7 +15,7 @@
  * or 0 if there is no such intersection
  * Outparameter for the color if there is an intersection
  */
-double ray_sphere_intersection(Ray *ray, Sphere *sphere, Color *color) {
+double ray_sphere_intersection(Ray *ray, Sphere *sphere, DoubleColor *color) {
     /* Determine whether the ray intersects with the sphere */
 
     /* Equations taken from Raytracing in a Weekend */
